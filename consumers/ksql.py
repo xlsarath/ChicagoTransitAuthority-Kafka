@@ -65,7 +65,8 @@ def execute_statement():
             logger.debug(f"{resp.status_code}")
 
     except Exception as e:
-        logger.error("error with execute_statement() skipping !!"+e)  
+        logger.error("error with execute_statement() skipping !!")
+        logger.error(f"error = {str(e)}")  
             
 
 

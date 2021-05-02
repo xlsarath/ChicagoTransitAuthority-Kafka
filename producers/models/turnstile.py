@@ -1,9 +1,7 @@
 """Creates a turnstile data producer"""
 import logging
 from pathlib import Path
-
 from confluent_kafka import avro
-
 from models.producer import Producer
 from models.turnstile_hardware import TurnstileHardware
 
@@ -55,3 +53,4 @@ class Turnstile(Producer):
             logger.info(f"{self.station.station_id}-{self.station.station_name}-{num_entries}")
         except Exception as e:
             logger.error("turnstile kafka integration incomplete - skipping")
+            logger.error(f"error = {str(e)}")

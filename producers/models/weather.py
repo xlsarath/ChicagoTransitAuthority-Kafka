@@ -5,9 +5,7 @@ import logging
 from pathlib import Path
 import random
 import urllib.parse
-
 import requests
-
 from models.producer import Producer
 
 
@@ -102,6 +100,7 @@ class Weather(Producer):
                 self.temp,
                 self.status.name,
             )
-        except:
+        except Exception as e:
             logger.info("weather kafka proxy integration incomplete - skipping")
             logger.error(json.dumps(resp.json(), indent=2))    
+            logger.error(f"error = {str(e)}")

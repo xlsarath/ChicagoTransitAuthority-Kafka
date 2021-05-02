@@ -1,7 +1,6 @@
 """Configures a Kafka Connector for Postgres Station data"""
 import json
 import logging
-
 import requests
 
 
@@ -61,9 +60,9 @@ def configure_connector():
     try:
         resp.raise_for_status()
         logging.debug("connector created successfully")
-    except:
+    except Exception as e:
         logger.info("connector code not completed skipping connector creation")
-
+        logger.error(f"error = {str(e)}")
     return
 
 if __name__ == "__main__":
