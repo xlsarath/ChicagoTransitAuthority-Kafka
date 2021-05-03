@@ -38,8 +38,8 @@ class Producer:
         # and use the Host URL for Kafka and Schema Registry!
         
         self.broker_properties = {
-            "bootstrap.servers" = URL_BROKER,
-            "schema.registry.url" = SCHEMA_REGISTRY,
+            "bootstrap.servers" : URL_BROKER,
+            "schema.registry.url" : SCHEMA_REGISTRY,
         }
 
         # If the topic does not already exist, try to create it
