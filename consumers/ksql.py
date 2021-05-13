@@ -1,7 +1,9 @@
 """Configures KSQL to combine station and turnstile data"""
 import json
 import logging
+
 import requests
+
 import topic_check
 
 
@@ -25,18 +27,16 @@ CREATE TABLE turnstile (
     station_name VARCHAR,
     line VARCHAR
 ) WITH (
-    kafka_topic='chicago_turnstiles',
-    value_format='avro',
-    key='station_id'
+    kafka_topic = 'org.chicago.cta.turnstile.v1',
+    value_format = 'avro',
+    key = 'station_id'
 );
 
-CREATE TABLE turnstile_summary
-WITH (value_format='JSON') AS
-    SELECT 
-    station_id,
-    count(station_id) AS count
-    FROM turnstile
-    GROUP BY station_id;
+CREATE TABLE TURNSTILE_SUMMARY
+WITH (value_format = 'json') AS
+SELECT station_id, COUNT(station_id) AS count 
+FROM turnstile
+GROUP BY station_id;
 """
 
 
@@ -59,15 +59,7 @@ def execute_statement():
     )
 
     # Ensure that a 2XX status code was returned
-    try:
-        resp.raise_for_status()
-        if resp.status_code >= 200 and resp.status_code <= 300:
-            logger.debug(f"{resp.status_code}")
-
-    except Exception as e:
-        logger.error("error with execute_statement() skipping !!")
-        logger.error(f"error = {str(e)}")  
-            
+    resp.raise_for_status()
 
 
 if __name__ == "__main__":
