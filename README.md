@@ -233,4 +233,140 @@ Once the simulation is running, you may hit `Ctrl+C` at any time to exit.
 Once the server is running, you may hit `Ctrl+C` at any time to exit.
 
 OverView:
-1. 
+1. producers/simulation.py
+
+root@0c62e10e6a8c:/home/workspace/producers# python simulation.py
+2021-05-13 00:11:48,571 __main__     INFO     Beginning simulation, press Ctrl+C to exit at any time
+2021-05-13 00:11:48,573 __main__     INFO     loading kafka connect jdbc source connector
+2021-05-13 00:11:50,332 __main__     INFO     beginning cta train simulation
+2021-05-13 00:11:52,387 models.producer INFO     org.chicago.cta.weather.v1 is created
+
+2. consumers/faust -A faust_stream worker -l info
+
+root@0c62e10e6a8c:/home/workspace/consumers# faust -A faust_stream worker -l info
+┌ƒaµS† v1.7.4─┬───────────────────────────────────────────────────┐
+│ id          │ stations-stream                                   │
+│ transport   │ [URL('kafka://localhost:9092')]                   │
+│ store       │ memory:                                           │
+│ web         │ http://localhost:6066/                            │
+│ log         │ -stderr- (info)                                   │
+│ pid         │ 8148                                              │
+│ hostname    │ 0c62e10e6a8c                                      │
+│ platform    │ CPython 3.7.3 (Linux x86_64)                      │
+│ drivers     │                                                   │
+│   transport │ aiokafka=1.0.6                                    │
+│   web       │ aiohttp=3.6.2                                     │
+│ datadir     │ /home/workspace/consumers/stations-stream-data    │
+│ appdir      │ /home/workspace/consumers/stations-stream-data/v1 │
+└─────────────┴───────────────────────────────────────────────────┘
+[2021-05-13 00:12:52,751: INFO]: [^Worker]: Starting... 
+[2021-05-13 00:12:52,759: INFO]: [^-App]: Starting... 
+[2021-05-13 00:12:52,760: INFO]: [^--Monitor]: Starting... 
+[2021-05-13 00:12:52,760: INFO]: [^--Producer]: Starting... 
+[2021-05-13 00:12:52,760: INFO]: [^---ProducerBuffer]: Starting... 
+[2021-05-13 00:12:52,788: INFO]: [^--CacheBackend]: Starting... 
+[2021-05-13 00:12:52,789: INFO]: [^--Web]: Starting... 
+[2021-05-13 00:12:52,789: INFO]: [^---Server]: Starting... 
+[2021-05-13 00:12:52,790: INFO]: [^--Consumer]: Starting... 
+[2021-05-13 00:12:52,792: INFO]: [^---AIOKafkaConsumerThread]: Starting... 
+[2021-05-13 00:12:53,763: INFO]: [^--LeaderAssignor]: Starting... 
+[2021-05-13 00:12:53,764: INFO]: [^--Producer]: Creating topic 'stations-stream-__assignor-__leader' 
+[2021-05-13 00:12:53,803: INFO]: [^--Producer]: Topic 'stations-stream-__assignor-__leader' created. 
+[2021-05-13 00:12:53,804: INFO]: [^--ReplyConsumer]: Starting... 
+[2021-05-13 00:12:53,804: INFO]: [^--AgentManager]: Starting... 
+[2021-05-13 00:12:53,804: INFO]: [^--Agent: faust_stream.station_event]: Starting... 
+[2021-05-13 00:12:53,809: INFO]: [^---OneForOneSupervisor]: Starting... 
+[2021-05-13 00:12:53,810: INFO]: [^--Conductor]: Starting... 
+[2021-05-13 00:12:53,810: INFO]: [^--TableManager]: Starting... 
+[2021-05-13 00:12:54,811: INFO]: [^--Table: org.chicago.cta.stations.table.v1]: Starting... 
+[2021-05-13 00:12:54,814: INFO]: [^---Store: org.chicago.cta.stations.table.v1]: Starting... 
+[2021-05-13 00:12:54,816: INFO]: [^--Producer]: Creating topic 'org.chicago.cta.stations.table.v1' 
+[2021-05-13 00:12:54,868: INFO]: [^--Producer]: Topic 'org.chicago.cta.stations.table.v1' created. 
+[2021-05-13 00:12:54,869: INFO]: [^---Recovery]: Starting... 
+[2021-05-13 00:12:55,811: INFO]: [^--Producer]: Creating topic 'stations-stream-__assignor-__leader' 
+[2021-05-13 00:12:56,814: INFO]: Updating subscribed topics to: frozenset({'org.chicago.cta.stations', 'org.chicago.cta.stations.table.v1', 'stations-stream-__assignor-__leader'}) 
+[2021-05-13 00:12:56,815: INFO]: Subscribed to topic(s): {'org.chicago.cta.stations', 'org.chicago.cta.stations.table.v1', 'stations-stream-__assignor-__leader'} 
+[2021-05-13 00:12:56,825: INFO]: Discovered coordinator 1 for group stations-stream 
+[2021-05-13 00:12:56,827: INFO]: Revoking previously assigned partitions set() for group stations-stream 
+[2021-05-13 00:12:57,814: INFO]: (Re-)joining group stations-stream 
+[2021-05-13 00:12:57,819: INFO]: Joined group 'stations-stream' (generation 1) with member_id faust-1.7.4-5c65e161-bda3-491a-8011-541e1f43633a 
+[2021-05-13 00:12:57,819: INFO]: Elected group leader -- performing partition assignments using faust 
+[2021-05-13 00:12:57,823: INFO]: Successfully synced group stations-stream with generation 1 
+[2021-05-13 00:12:57,824: INFO]: Setting newly assigned partitions {TopicPartition(topic='stations-stream-__assignor-__leader', partition=0), TopicPartition(topic='org.chicago.cta.stations', partition=0), TopicPartition(topic='org.chicago.cta.stations.table.v1', partition=0)} for group stations-stream 
+[2021-05-13 00:12:59,769: INFO]: [^---Recovery]: Highwater for active changelog partitions:
+┌Highwater - Active─────────────────┬───────────┬───────────┐
+│ topic                             │ partition │ highwater │
+├───────────────────────────────────┼───────────┼───────────┤
+│ org.chicago.cta.stations.table.v1 │ 0         │ -1        │
+└───────────────────────────────────┴───────────┴───────────┘ 
+[2021-05-13 00:13:01,195: INFO]: [^---Recovery]: active offsets at start of reading:
+┌Reading Starts At - Active─────────┬───────────┬────────┐
+│ topic                             │ partition │ offset │
+├───────────────────────────────────┼───────────┼────────┤
+│ org.chicago.cta.stations.table.v1 │ 0         │ -1     │
+└───────────────────────────────────┴───────────┴────────┘ 
+[2021-05-13 00:13:01,772: INFO]: [^---Recovery]: standby offsets at start of reading:
+┌Reading Starts At - Standby─┐
+│ topic │ partition │ offset │
+└───────┴───────────┴────────┘ 
+[2021-05-13 00:13:02,770: INFO]: [^---Recovery]: Resuming flow... 
+[2021-05-13 00:13:02,771: INFO]: [^---Recovery]: Recovery complete 
+[2021-05-13 00:13:02,872: INFO]: [^---Recovery]: Restore complete! 
+[2021-05-13 00:13:02,873: INFO]: [^---Recovery]: Seek stream partitions to committed offsets. 
+[2021-05-13 00:13:03,775: INFO]: [^--Fetcher]: Starting... 
+[2021-05-13 00:13:03,775: INFO]: [^---Recovery]: Worker ready 
+[2021-05-13 00:13:03,776: INFO]: [^Worker]: Ready 
+[2021-05-13 00:13:07,779: INFO]: Timer commit woke up too late, with a drift of +0.9306395850000628 
+
+3. python consumers/ksql.py  --tables get created
+>ksql
+ksql> select * from turnstile;
+1620865100258 | Ƨ���^ | 41330 | Montrose | blue
+1620865100260 | ȧ���^ | 41330 | Montrose | blue
+1620865100260 | ʧ���^ | 41330 | Montrose | blue
+1620865100323 | ¨���^ | 40370 | Washington | blue
+1620865100323 | ƨ���^ | 40370 | Washington | blue
+1620865100324 | Ȩ���^ | 40370 | Washington | blue
+1620865100340 | 訵��^ | 41340 | LaSalle | blue
+1620865100455 | Ϊ���^ | 41380 | Bryn Mawr | red
+ksql> select * from TURNSTILE_SUMMARY;
+1620865207512 | 40230 | 40230 | 11
+1620865207329 | 40350 | 40350 | 12
+1620865207265 | 41280 | 41280 | 11
+
+4. python consumers/server.py
+
+root@0c62e10e6a8c:/home/workspace# python consumers/server.py 
+2021-05-13 00:22:30,510 __main__     INFO     Open a web browser to http://localhost:8888 to see the Transit Status Page
+2021-05-13 00:22:33,818 consumer     INFO     partitions assigned for org.chicago.cta.weather.v1
+2021-05-13 00:22:34,150 consumer     INFO     partitions assigned for TURNSTILE_SUMMARY
+2021-05-13 00:22:35,151 consumer     INFO     partitions assigned for ^org.chicago.cta.station.arrivals.
+2021-05-13 00:22:36,153 consumer     INFO     partitions assigned for org.chicago.cta.stations.table.v1
+
+5. Kafka Topics CLI useful commands:
+### Kafka Topics CLI, topics appear for arrivals on each train line in addition to the turnstiles for each of those stations.
+command kafka-topics --list --zookeeper localhost:2181 
+
+### Kafka Topics CLI, messages continuously appear for each station on the train line, for both arrivals and turnstile actions.
+kafka-avro-console-consumer --topic org.chicago.cta.turnstile.v1 --from-beginning --bootstrap-server localhost:9092 --max-messages 10
+
+### kafka-console-consumer, (REST proxy)weather messages are visible in the weather topic and are regularly produced as the simulation runs.
+kafka-avro-console-consumer --topic org.chicago.cta.weather.v1 --from-beginning --bootstrap-server localhost:9092 --max-messages 10
+
+### kafka-console-consumer, all stations defined in Postgres are visible in the stations topic.
+kafka-console-consumer --topic org.chicago.cta.stations --from-beginning --bootstrap-server localhost:9092 --max-messages 10
+
+### A consumer group for Faust is created on the Kafka Connect Stations topic
+python consumers/faust_stream.py tables
+
+### Data is ingested in the Station format and is then transformed into the TransformedStation format.
+python consumers/faust_stream.py --json worker
+
+### A topic is present in Kafka with the output topic name the student supplied. Inspecting messages in the topic, every station ID is represented.
+kafka-console-consumer --topic org.chicago.cta.stations.table.v1 --from-beginning --bootstrap-server localhost:9092 --max-messages 10
+
+### Using the KSQL CLI, turnstile data is visible in the table TURNSTILE.
+select * from turnstile;
+
+### Using the KSQL CLI, verify that station IDs have an associated count column.
+select * from TURNSTILE_SUMMARY;
