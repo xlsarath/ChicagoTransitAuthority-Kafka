@@ -7,7 +7,6 @@ from confluent_kafka import avro
 from models.producer import Producer
 from models.turnstile_hardware import TurnstileHardware
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -18,31 +17,29 @@ class Turnstile(Producer):
     # TODO: Define this value schema in `schemas/turnstile_value.json, then uncomment the below
     #
     value_schema = avro.load(
-       f"{Path(__file__).parents[0]}/schemas/turnstile_value.json"
+        f"{Path(__file__).parents[0]}/schemas/turnstile_value.json"
     )
 
     def __init__(self, station):
         """Create the Turnstile"""
-        station_kafka_name = (
+        station_name = (
             station.name.lower()
-            .replace("/", "_and_")
-            .replace(" ", "_")
-            .replace("-", "_")
-            .replace("'", "")
+                .replace("/", "_and_")
+                .replace(" ", "_")
+                .replace("-", "_")
+                .replace("'", "")
         )
 
-        #
-        #
-        # Complete the below by deciding on a topic name, number of partitions, and number of
-        # replicas
-        #
-        #
+        # TODO: Complete the below by deciding on a topic name, number of partitions, and number of replicas
         super().__init__(
-            f"com.udacity.turnstile",
+            'org.chicago.cta.turnstile.v1',  # TODO: Come up with a better topic name
+            # TODO: value_schema=Turnstile.value_schema, TODO: Uncomment once schema is defined
+            # TODO: num_partitions=???,
+            # TODO: num_replicas=???,
             key_schema=Turnstile.key_schema,
             value_schema=Turnstile.value_schema,
-            num_partitions=3,
-            num_replicas=2
+            num_partitions=1,
+            num_replicas=1
         )
         self.station = station
         self.turnstile_hardware = TurnstileHardware(station)
@@ -50,19 +47,19 @@ class Turnstile(Producer):
     def run(self, timestamp, time_step):
         """Simulates riders entering through the turnstile."""
         num_entries = self.turnstile_hardware.get_entries(timestamp, time_step)
-        #
-        #
-        # Emit a message to the turnstile topic for the number
+        # TODO: Complete this function by emitting a message to the turnstile topic for the number
         # of entries that were calculated
-        #
-        #
+
         for _ in range(num_entries):
             self.producer.produce(
-            topic=self.topic_name,
-            key={"timestamp": self._unix_time_millis(timestamp)},
-            value={
-                "station_id": self.station.station_id,
-                "station_name": self.station.name,
-                "line": "L"
-            },
+                topic=self.topic_name,
+                key_schema=self.key_schema,
+                value_schema=self.value_schema,
+                key={"timestamp": self.time_millis()},
+                value={
+                    # TODO: Configure this
+                    'station_id': self.station.station_id,
+                    'station_name': self.station.name,
+                    'line': self.station.color.name,
+                },
             )

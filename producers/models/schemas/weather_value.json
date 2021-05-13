@@ -1,5 +1,5 @@
 {
-  "namespace": "com.udacity",
+  "namespace": "org.chicago.cta",
   "type": "record",
   "name": "weather.value",
   "fields": [
@@ -10,11 +10,10 @@
     {
       "name": "status",
       "type": {
-        "type" : "enum",
-        "name" : "weather.type", 
-        "namespace": "com.udacity", 
-        "symbols" : ["sunny", "partly_cloudy", "cloudy", "windy", "precipitation"]
-     }
+        "type": "enum",
+        "name": "weather_status",
+        "symbols": ["sunny", "partly_cloudy", "cloudy", "windy", "precipitation"]
+      }
     }
   ]
 }
